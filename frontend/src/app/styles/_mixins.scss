@@ -2,7 +2,7 @@
 
 //buttons
 @mixin button($bg, $color) {
-  padding: 12px 7.5px;
+  padding: 12px 8px;
   background-color: $bg;
   border-radius: $border-radius-btn;
   color: $color;
@@ -19,10 +19,10 @@
 }
 
 // lists
-@mixin card-colors($bg, $border:transparent) {
+@mixin card-colors($bg) {
   h2 {color: $dark}
   background-color: $bg;
-  border: 1px solid $border;
+  border: $border-transparent;
   color: $description-color;
 }
 
@@ -42,7 +42,7 @@
   -moz-appearance: none;
 
   &:focus {
-    border: 1px solid $blue;
+    border: $selected-border;
     outline: none;
   }
 }

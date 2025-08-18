@@ -1,0 +1,67 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+
+.table-container {
+  gap: 16px;
+  margin: 32px 10% calc(32px + $footer-height * 2) 10%;
+  border-radius: $border-radius-container;
+
+  .large-row {
+    grid-column: 1 / -1;
+  }
+
+  .no-data {
+    padding: 16px;
+    text-align: center;
+    background-color: $white;
+  }
+
+  .filter-container {
+    background-color: $container-bg;
+    padding: 16px 24px;
+    border-top-right-radius: $border-radius-container;
+    border-top-left-radius: $border-radius-container;
+    border: $border;
+    border-bottom: $border-transparent;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .table-grid {
+    background: $light;
+    border: $border;
+    padding-right: 1px;
+
+    .list-grid-row {
+      display: grid;
+      gap: 1px;
+      background-color: $light;
+    }
+
+    .list-grid-item {
+      display: grid;
+      grid-template-columns: repeat(2, 50%);
+      gap: 1px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .table-container {
+    .table-grid {
+      grid-template-columns: repeat(1, 1fr);
+
+      .list-grid-item {
+        display: flex;
+        flex-direction: column;
+        margin-right: -1px;
+      }
+      border-right: $border;
+      border-left: $border;
+    }
+  }
+}

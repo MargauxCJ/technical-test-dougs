@@ -7,6 +7,7 @@ import {CategoriesStore} from '../../stores/categories.store';
 import {SelectComponent} from '../../../../shared/ui/select/select.component';
 import {Category} from '../../models/category.model';
 import {CommonModule} from '@angular/common';
+import {SliceToRowsPipe} from '../../../../pipes/slice-to-rows.pipe';
 
 @Component({
   selector: 'app-categories-list',
@@ -16,7 +17,8 @@ import {CommonModule} from '@angular/common';
     SortButtonsComponent,
     FormsModule,
     SelectComponent,
-    CommonModule
+    CommonModule,
+    SliceToRowsPipe
   ],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.scss',
@@ -27,6 +29,7 @@ export class CategoriesListComponent implements OnInit{
 
   public categories$ = this.categoriesStore.filteredCategories$;
   public categoriesByGroup$ = this.categoriesStore.categoriesByGroup$;
+
   public groups$ = this.categoriesStore.groups$;
   public sort$ = this.categoriesStore.sort$;
   public search$ = this.categoriesStore.search$;
@@ -44,5 +47,9 @@ export class CategoriesListComponent implements OnInit{
 
   public getSelectedCategory(value: Category) {
     this.categorySelected = value;
+  }
+
+  public displayCategory() {
+    console.log('Category selected : ', this.categorySelected);
   }
 }

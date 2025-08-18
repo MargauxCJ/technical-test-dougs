@@ -4,7 +4,6 @@
 $category-default-background: $white;
 $category-hover-background: #F3F5F8;
 $category-selected-background: $selected-background;
-$category-selected-border: $blue;
 
 .category-card {
   display: flex;
@@ -22,7 +21,7 @@ $category-selected-border: $blue;
   }
 
   h2 {
-    margin: 4px 0
+    margin: 4px 0;
   }
 
   @include card-colors($category-default-background);
@@ -32,7 +31,8 @@ $category-selected-border: $blue;
   }
 
   &.selected {
-    @include card-colors($category-selected-background, $category-selected-border);
+    @include card-colors($category-selected-background);
+    border: $selected-border;
   }
 
   //&:focus {

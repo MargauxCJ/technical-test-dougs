@@ -27,11 +27,12 @@ $group-colors: (
   purple: (text: $purple, bg: $light-purple),
   green: (text: $green, bg: $light-green),
   pink: (text: $pink, bg: $light-pink),
-  no-color: (text: $dark, bg: $white),
+  no-color: (text: $dark, bg: $light),
 );
 
 $description-color: #636970;
 $selected-background: #F1F7FC;
+$selected-border: 1px solid $blue;
 
 $text-color: $dark;
 $bg: #F3F5F8;
@@ -39,6 +40,7 @@ $container-bg: $white;
 
 //borders
 $border: 1px solid $light;
+$border-transparent: 1px solid transparent;
 $border-radius-container: 4px;
 $border-radius-btn: 4px;
 $border-radius-input: 4px;

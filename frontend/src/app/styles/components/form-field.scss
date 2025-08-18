@@ -1,0 +1,44 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+
+
+input[type=text] {
+  @include form-field();
+}
+
+//search-bar
+input[type=text].search-bar {
+  box-sizing: border-box;
+  background-image: url('../../../../public/icons/search-icon.svg');
+  background-position: 10px center;
+  background-repeat: no-repeat;
+  padding: 8px 20px 8px 40px;
+  @include form-field();
+
+  &::placeholder {
+    color: $dark;
+  }
+}
+
+app-search-bar {
+  width: 100%;
+}
+
+//select
+select {
+  appearance: none;
+  background: $white url('/icons/arrow-icon.svg') no-repeat right 0.75rem center;
+  padding: 8px 32px 8px 8px;
+  @include form-field();
+}
+
+@media (max-width: 576px) {
+  select {
+    width: 100%;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
