@@ -1,0 +1,51 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.sort-button {
+  padding: 8px;
+  cursor: pointer;
+  border: none;
+  border-radius: $border-radius-btn;
+  background-color: transparent;
+  color: $medium;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    color: $medium;
+    width: 14px;
+    height: 14px;
+    margin-right: 8px;
+  }
+
+  &.selected {
+    background-color: $selected-background;
+    color: $blue;
+
+    svg {
+      color: $blue;
+    }
+  }
+}
+
+.primary-button {
+  @include button($blue, $white);
+}
+
+.button-clear {
+  text-decoration: underline;
+  @include button(transparent, $blue);
+}
+
+@media (max-width: 789px) {
+  .sort-button {
+    span {
+      display: none;
+    }
+    svg {
+      margin-right: 0;
+    }
+  }
+}
+

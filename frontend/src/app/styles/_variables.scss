@@ -1,0 +1,46 @@
+//Neutral colors
+$dark: #001A25;
+$medium: #58676D;
+$light: #DCE4ED;
+$white: #FFFFFF;
+
+//Group colors
+// Some colors was missing from the Figma prototype (purple green pink)
+$blue: #11ABEC;
+$red: #FD755F;
+$yellow: #FAA11C;
+$purple: #A76DEB;
+$green: #4AC18E;
+$pink: #FF8CC1;
+
+$light-blue: #F1F7FC;
+$light-red: #FFECE6;
+$light-yellow: #FFF5BF;
+$light-purple: #f3edff;
+$light-green: #f0fff8;
+$light-pink: #fff2f7;
+
+$group-colors: (
+  blue: (text: $blue, bg: $light-blue),
+  red: (text: $red, bg: $light-red),
+  yellow: (text: $yellow, bg: $light-yellow),
+  purple: (text: $purple, bg: $light-purple),
+  green: (text: $green, bg: $light-green),
+  pink: (text: $pink, bg: $light-pink),
+);
+
+$description-color: #636970;
+$selected-background: #F1F7FC;
+
+$text-color: $dark;
+$bg: #F3F5F8;
+$container-bg: $white;
+
+//borders
+$border: 1px solid $light;
+$border-radius-container: 4px;
+$border-radius-btn: 4px;
+$border-radius-input: 4px;
+
+$footer-height: 40px;
+

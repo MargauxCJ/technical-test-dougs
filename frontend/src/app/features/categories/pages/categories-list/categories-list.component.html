@@ -1,0 +1,72 @@
+<div class="body-container">
+
+  <header>
+    <h1>Catégorie</h1>
+    <app-sort-buttons
+      [ngModel]="sort$|async"
+      (ngModelChange)="categoriesStore.setSort($event)"
+      [options]="sortOptions">
+    </app-sort-buttons>
+  </header>
+
+  <div class="list-container">
+
+    <!--  Filters & Search  -->
+    <div class="large-row search-container">
+      <app-search-bar [ngModel]="search$|async" (ngModelChange)="categoriesStore.setSearch($event)"/>
+      <app-select
+        [options]="groups$|async"
+        [ngModel]="selectGroup$|async"
+        [labelKey]="'name'"
+        [valueKey]="'id'"
+        [defaultOption]="{value: null, label: 'Tous les groupes de catégories'}"
+        (ngModelChange)="categoriesStore.setGroup($event)">
+      </app-select>
+    </div>
+
+    <!--  Categories List  -->
+    <div class="table-grid">
+      @if ((categories$|async).length > 0) {
+        @if ((sort$|async) === 'alphabet') {
+          @for (category of (categories$|async); track category) {
+            <app-category-card
+              [category]="category"
+              [isCategorySelected]="categorySelected?.id === category.id"
+              (selection)="getSelectedCategory($event)"
+            ></app-category-card>
+          }
+        } @else {
+          @for (categoriesByGroup of (categoriesByGroup$|async); track categoriesByGroup.group.id) {
+            <div class="large-row group-title" [ngClass]="categoriesByGroup.group.color">
+              {{ categoriesByGroup.group.name }}
+            </div>
+
+            @for (category of categoriesByGroup.categories; track category) {
+              <app-category-card
+                [category]="category"
+                [isCategorySelected]="categorySelected?.id === category.id"
+                [showTag]="false"
+                (selection)="getSelectedCategory($event)"
+              ></app-category-card>
+            }
+          }
+        }
+      } @else {
+        <div class="large-row no-data">
+          <p>Aucune catégorie ne correspond à la recherche.</p>
+          <button class="button-clear" (click)="categoriesStore.clearFilters()">Effacer les filtres</button>
+        </div>
+      }
+    </div>
+
+  </div>
+
+  <footer>
+    <button class="primary-button"
+            [class.disabled]="!categorySelected"
+            tabindex="0"
+            [disabled]="!categorySelected">
+      Sélectionner la catégorie
+    </button>
+  </footer>
+</div>

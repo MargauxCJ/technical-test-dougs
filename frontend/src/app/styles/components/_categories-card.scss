@@ -1,0 +1,43 @@
+@use "../variables" as *;
+@use "../mixins" as *;
+
+$category-default-background: $white;
+$category-hover-background: #F3F5F8;
+$category-selected-background: $selected-background;
+$category-selected-border: $blue;
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  cursor: pointer;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 16px 24.5px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  h2 {
+    margin: 4px 0
+  }
+
+  @include card-colors($category-default-background);
+
+  &:hover {
+    @include card-colors($category-hover-background);
+  }
+
+  &.selected {
+    @include card-colors($category-selected-background, $category-selected-border);
+  }
+
+  &:focus {
+    outline: 1px solid $blue;
+  }
+}
+
+
