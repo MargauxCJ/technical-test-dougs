@@ -37,7 +37,7 @@
           }
         } @else {
           @for (categoriesByGroup of (categoriesByGroup$|async); track categoriesByGroup.group.id) {
-            <div class="large-row group-title" [ngClass]="categoriesByGroup.group.color">
+            <div class="large-row group-title" [ngClass]="categoriesByGroup.group.color ? categoriesByGroup.group.color : 'm-no-color'">
               {{ categoriesByGroup.group.name }}
             </div>
 

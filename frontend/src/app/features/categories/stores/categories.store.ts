@@ -14,7 +14,7 @@ export class CategoriesStore {
   private _selectGroup$ = new BehaviorSubject<number | null>(null);
   private _sort$ = new BehaviorSubject<string>('group');
 
-  private fallbackGroup = {id: -1, name: 'Autres', color: 'grey' }
+  private fallbackGroup = {id: -1, name: 'Autres', color: 'm-no-color' }
 
   public init() {
     if(!this._categories$.value.length) {
@@ -109,7 +109,8 @@ export class CategoriesStore {
         });
       }
 
-        return res
+      //Sort group name in alphabetical order (see Figma wireframes)
+      return res.sort((a, b) => a.group.name.localeCompare(b.group.name));
       }
     ),
     shareReplay(1),

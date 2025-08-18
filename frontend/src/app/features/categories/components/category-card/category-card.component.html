@@ -3,7 +3,7 @@
      (accessibleClick)="selectCategory()"
      [class.selected]="isCategorySelected">
   @if (category.group && showTag === true) {
-    <div class="group-tag" [ngClass]="category.group.color">
+    <div class="group-tag" [ngClass]="category.group.color ? category.group.color : 'm-no-color'">
       {{category.group.name}}
     </div>
   }

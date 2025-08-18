@@ -27,6 +27,7 @@ $group-colors: (
   purple: (text: $purple, bg: $light-purple),
   green: (text: $green, bg: $light-green),
   pink: (text: $pink, bg: $light-pink),
+  no-color: (text: $dark, bg: $white),
 );
 
 $description-color: #636970;
