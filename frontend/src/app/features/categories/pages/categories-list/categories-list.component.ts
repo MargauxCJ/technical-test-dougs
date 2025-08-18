@@ -50,6 +50,6 @@ export class CategoriesListComponent implements OnInit{
   }
 
   public displayCategory() {
-    console.log('Category selected : ', this.categorySelected);
+    console.log('category selected : ', this.categorySelected);
   }
 }

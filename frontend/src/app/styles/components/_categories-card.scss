@@ -35,9 +35,16 @@ $category-selected-background: $selected-background;
     border: $selected-border;
   }
 
-  //&:focus {
-  //  outline: 1px solid $blue;
-  //}
+  &:focus-visible {
+    outline: 0;
+    @include card-colors($category-hover-background);
+  }
+
+  &:focus-visible.selected {
+    @include card-colors($category-selected-background);
+    border: $selected-border;
+    outline: 0;
+  }
 }
 
 
