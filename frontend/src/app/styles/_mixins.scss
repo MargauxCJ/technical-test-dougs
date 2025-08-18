@@ -30,3 +30,19 @@
   background-color: $bg;
   color: $color;
 }
+
+@mixin form-field() {
+  border: $border;
+  color: $dark;
+  padding-top: 8px;
+  font-size: 12px;
+  padding-bottom: 8px;
+  border-radius: $border-radius-input;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  &:focus {
+    border: 1px solid $blue;
+    outline: none;
+  }
+}

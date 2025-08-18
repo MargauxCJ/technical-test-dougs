@@ -30,7 +30,8 @@ header {
 
 footer {
   position: fixed;
-  width: stretch;
+  width: 100%;
+  box-sizing: border-box;
   bottom: 0;
   background-color:  variables.$container-bg;
   padding: 15px 10%;
