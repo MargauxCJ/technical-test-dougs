@@ -4,6 +4,8 @@
     "frontend:start": "cd frontend && npm start",
     "api:install": "cd api && npm install",
     "api:start": "cd api && npm start",
+    "frontend:test": "cd frontend && npm run test",
+    "frontend:lint": "cd frontend && ng lint",
     "install-all": "npm-run-all --parallel frontend:install api:install",
     "start-all": "npm-run-all --parallel frontend:start api:start"
   },

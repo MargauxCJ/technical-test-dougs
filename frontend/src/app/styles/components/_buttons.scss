@@ -38,7 +38,7 @@
   @include button(transparent, $blue);
 }
 
-@media (max-width: 789px) {
+@media (max-width: 576px) {
   .sort-button {
     span {
       display: none;

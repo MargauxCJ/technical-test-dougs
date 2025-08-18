@@ -35,9 +35,9 @@ $category-selected-border: $blue;
     @include card-colors($category-selected-background, $category-selected-border);
   }
 
-  &:focus {
-    outline: 1px solid $blue;
-  }
+  //&:focus {
+  //  outline: 1px solid $blue;
+  //}
 }
 
 
