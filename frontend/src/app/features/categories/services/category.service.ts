@@ -15,7 +15,7 @@ export class CategoryService {
   }
 
   public getVisibleCategoriesIds(): Observable<{id: number}[]> {
-    return this.http.get<{id: number}[]>(API_PREFIX+'visible-categories')
+    return this.http.get<{id: number}[]>(API_PREFIX+'visible-categories');
   }
 
   public getVisibleCategories(): Observable<Category[]> {
@@ -28,6 +28,6 @@ export class CategoryService {
           const visibleIds = visibles.map(v => v.id);
           return all.filter(category => visibleIds.includes(category.id));
         })
-      )
+      );
   }
 }

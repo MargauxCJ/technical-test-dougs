@@ -7,7 +7,7 @@
       {{category.group.name}}
     </div>
   }
-  <h2>{{category.wording}}</h2>
-  <p>{{category.description ? category.description : "Aucune description."}}</p>
+  <h2 [innerHTML]="category.wording"></h2>
+  <p [innerHTML]="category.description ? category.description : '<em>Aucune description.</em>'"></p>
 </div>
 

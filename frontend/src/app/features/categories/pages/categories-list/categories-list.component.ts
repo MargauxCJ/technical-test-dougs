@@ -34,8 +34,8 @@ export class CategoriesListComponent implements OnInit{
 
   public categorySelected: Category;
   public sortOptions: SortOption[] = [
-    { label: 'Ordre alphabétique', value: 'alphabet', icon: 'icon-alphabet'},
     { label: 'Groupe de catégorie', value: 'group', icon: 'icon-group'},
+    { label: 'Ordre alphabétique', value: 'alphabet', icon: 'icon-alphabet'},
   ];
 
   public ngOnInit(): void {

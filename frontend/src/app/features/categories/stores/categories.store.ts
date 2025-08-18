@@ -12,7 +12,9 @@ export class CategoriesStore {
   private _categories$ = new BehaviorSubject<Category[]>([]);
   private _search$ = new BehaviorSubject<string>('');
   private _selectGroup$ = new BehaviorSubject<number | null>(null);
-  private _sort$ = new BehaviorSubject<string>('alphabet');
+  private _sort$ = new BehaviorSubject<string>('group');
+
+  private fallbackGroup = {id: -1, name: 'Autres', color: 'grey' }
 
   public init() {
     if(!this._categories$.value.length) {
@@ -30,12 +32,24 @@ export class CategoriesStore {
     map((categories) => {
       const group: Group[] = [];
       const seen = new Set<number>();
+      let hasCatUngrouped = false;
+
       for (const category of categories) {
+        if(category.group) {
         if (category.group && !seen.has(category.group.id)) {
           seen.add(category.group.id);
           group.push(category.group);
         }
+        } else {
+          hasCatUngrouped = true
+        }
       }
+
+      // There is no such case in the visibleCategories List, but group is optional in Category model
+      if (hasCatUngrouped) {
+        group.push(this.fallbackGroup);
+      }
+
       return group;
     }),
     shareReplay(1),
@@ -62,7 +76,9 @@ export class CategoriesStore {
       }
 
       if (group) {
-        res = res.filter((category: Category) => category.group?.id === group);
+        res = group === this.fallbackGroup.id ?
+          res.filter((category: Category) => !category.group) :
+          res.filter((category: Category) => category.group?.id === group);
       }
 
       if (sort === 'alphabet') {
@@ -85,11 +101,10 @@ export class CategoriesStore {
         }))
         .filter((g) => g.categories.length > 0);
 
-      // There is no such case in the visibleCategories List, but group is optional in Category model
-      const  uncategorized = categories.filter(c => !c.group);
+      const uncategorized = categories.filter(c => !c.group);
       if (uncategorized.length > 0) {
         res.push({
-          group: { id: -1, name: 'Autres', color: 'grey' },
+          group: this.fallbackGroup,
           categories: uncategorized
         });
       }
@@ -102,7 +117,6 @@ export class CategoriesStore {
 
   public clearFilters() {
     this._search$.next('');
-    this._sort$.next('alphabet');
     this._selectGroup$.next(null);
   }
 
