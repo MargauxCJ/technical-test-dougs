@@ -40,3 +40,71 @@ footer {
   justify-content: flex-end;
   height: variables.$footer-height;
 }
+
+.not-found-container {
+  align-items: center;
+  justify-content: center;
+
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 5rem;
+    }
+
+    h1 {
+      margin: 16px 0;
+    }
+
+  }
+}
+
+//it's useless, but I love keyframe animations
+.loading-animation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    margin: 8px;
+  }
+  .loading-animation {
+    position: relative;
+    width: 180px;
+    height: 10px;
+    overflow: hidden;
+    border: variables.$border;
+    border-radius: 100px;
+
+    .logo {
+      width: 10px;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translate(-20px, -50%) rotate(0deg);
+      animation: rollAcross 3s linear infinite;
+    }
+
+    .logo:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .logo:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+    .logo:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+  }
+}
+
+@keyframes rollAcross {
+  0% {
+    transform: translate(-20px, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(170px, -50%) rotate(720deg);
+  }
+}

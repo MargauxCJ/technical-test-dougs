@@ -13,13 +13,6 @@ import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/for
       placeholder="Rechercher"
     >
   `,
-  styles: [`
-    .search-bar {
-      width: 100%;
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-  `],
   imports: [
     FormsModule
   ],

@@ -8,6 +8,7 @@ import {SelectComponent} from '../../../../shared/ui/select/select.component';
 import {Category} from '../../models/category.model';
 import {CommonModule} from '@angular/common';
 import {SliceToRowsPipe} from '../../../../shared/pipes/slice-to-rows.pipe';
+import {LoadingComponent} from '../../../../shared/ui/loading/loading.component';
 
 @Component({
   selector: 'app-categories-list',
@@ -19,21 +20,24 @@ import {SliceToRowsPipe} from '../../../../shared/pipes/slice-to-rows.pipe';
     SelectComponent,
     CommonModule,
     SliceToRowsPipe,
+    LoadingComponent,
   ],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.scss',
   standalone: true
 })
-export class CategoriesListComponent implements OnInit{
+export class CategoriesListComponent implements OnInit {
   public categoriesStore: CategoriesStore = inject(CategoriesStore);
 
   public filteredCategories$ = this.categoriesStore.filteredCategories$;
   public categoriesByGroup$ = this.categoriesStore.categoriesByGroup$;
-
   public groups$ = this.categoriesStore.groups$;
   public sort$ = this.categoriesStore.sort$;
   public search$ = this.categoriesStore.search$;
   public selectedGroupId$ = this.categoriesStore.selectedGroupId$;
+
+  public loading$ = this.categoriesStore.loading$;
+  public error$ = this.categoriesStore.error$;
 
   public listColumnNumber = 2;
   public sortOptions: SortOption[] = [

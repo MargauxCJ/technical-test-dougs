@@ -1,5 +1,11 @@
 <div class="body-container">
+  <!-- ALL THE ASYNC ON CATEGORIES STATE  -->
   @let sort = (sort$|async);
+  @let loading = (loading$|async);
+  @let error = (error$|async);
+  @let filteredCategories = (filteredCategories$|async);
+  @let groupedCategories = (categoriesByGroup$|async);
+
   <header>
     <h1>Catégorie</h1>
     <app-sort-buttons
@@ -9,10 +15,9 @@
     </app-sort-buttons>
   </header>
 
-  <div class="table-container" [style.border-bottom-width]="sort === 'alphabet' ? '0': '1px'">
-
-    <!--  Filters & Search  -->
-    <div class="large-row filter-container" [style.border-bottom-width]="sort === 'alphabet' ? '1px' :'0'">
+  <div class="table-container" [style.border-bottom-width]="sort === 'alphabet' ? '0' : '1px'">
+    <!-- Filters & Search -->
+    <div class="large-row filter-container" [style.border-bottom-width]="sort === 'alphabet' ? '1px' : '0'">
       <app-search-bar [ngModel]="search$|async" (ngModelChange)="categoriesStore.setSearch($event)"/>
       <app-select
         [options]="groups$|async"
@@ -24,33 +29,42 @@
       </app-select>
     </div>
 
-    <!--  Categories table  -->
     <div class="table">
-      @if ((filteredCategories$|async).length > 0) {
+      @if (loading) {
+        <!-- LOADING -->
+        <div class="large-row no-data loading">
+          <app-loading></app-loading>
+        </div>
+      } @else if (error) {
+        <!-- ERROR -->
+        <div class="large-row  no-data error">
+        <p>Un problème est survenu : {{error}}</p>
+          <button class="primary-button-outline" (click)="categoriesStore.init()">Réessayer</button>
+        </div>
+      } @else if (filteredCategories?.length > 0) {
         @if (sort === 'alphabet') {
-          <!-- Alphabetical Order, without group -->
-          @for (row of (filteredCategories$|async | sliceToRows:listColumnNumber); track row) {
+          <!-- Alphabetical Order -->
+          @for (row of (filteredCategories | sliceToRows:listColumnNumber); track $index) {
             <ng-container *ngTemplateOutlet="tableItem; context: {row, showTag: true}"></ng-container>
           }
-
         } @else {
-
           <!-- Group Order -->
-          @for (categoriesByGroup of (categoriesByGroup$|async); track categoriesByGroup.group.id) {
+          @for (categoriesByGroup of groupedCategories; track categoriesByGroup.group.id) {
             <div class="list-group">
               <div class="group-title"
                    [ngClass]="categoriesByGroup.group.color ? categoriesByGroup.group.color : 'm-no-color'">
                 {{ categoriesByGroup.group.name }}
               </div>
               <div class="table-row">
-                @for (row of (categoriesByGroup.categories | sliceToRows:listColumnNumber); track row) {
-                    <ng-container *ngTemplateOutlet="tableItem; context: {row, showTag: false}"></ng-container>
+                @for (row of (categoriesByGroup.categories | sliceToRows:listColumnNumber); track $index) {
+                  <ng-container *ngTemplateOutlet="tableItem; context: {row, showTag: false}"></ng-container>
                 }
               </div>
             </div>
           }
         }
       } @else {
+        <!-- NO DATA :( -->
         <div class="large-row no-data">
           <p>Aucune catégorie ne correspond à la recherche.</p>
           <button class="primary-button-outline" (click)="categoriesStore.clearFilters()">Effacer les filtres</button>
@@ -63,7 +77,6 @@
     <button class="primary-button"
             [class.disabled]="!selectedCategory"
             (click)="displayCategory()"
-            tabindex="0"
             [disabled]="!selectedCategory">
       Sélectionner la catégorie
     </button>
@@ -73,7 +86,6 @@
 <!-- COLUMN ITEM TEMPLATE -->
 <ng-template #tableItem let-row="row" let-showTag="showTag">
   <div class="table-cell" [style.grid-template-columns]="'repeat(' + listColumnNumber + ', 1fr)'">
-
     @for (category of row; track category.id) {
       <app-category-card
         class="cell"
@@ -83,10 +95,8 @@
         (selection)="getSelectedCategory($event)">
       </app-category-card>
     }
-
     @for (empty of getEmptyColumns(row.length, listColumnNumber); track $index) {
       <div class="cell empty-cell"></div>
     }
-
   </div>
 </ng-template>

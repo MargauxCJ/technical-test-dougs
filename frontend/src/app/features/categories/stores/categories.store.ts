@@ -1,84 +1,91 @@
-import {inject, Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, Observable, shareReplay} from 'rxjs';
-import {Category, CategoryGroup} from '../models/category.model';
-import {CategoryService} from '../services/category.service';
-import {Group} from '../models/group.model';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, combineLatest, map, shareReplay } from 'rxjs';
+import { Category, CategoryGroup } from '../models/category.model';
+import { CategoryService } from '../services/category.service';
+import { Group } from '../models/group.model';
+
+
+interface CategoriesState {
+  categories: Category[];
+  search: string;
+  sort: string;
+  selectedGroupId: number | null;
+  loading: boolean;
+  error: string | null;
+}
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesStore {
-  private categoryService= inject(CategoryService);
+  private categoryService = inject(CategoryService);
 
-  private _categories$ = new BehaviorSubject<Category[]>([]);
-  private _search$ = new BehaviorSubject<string>('');
-  private _selectedGroupId$ = new BehaviorSubject<number | null>(null);
-  private _sort$ = new BehaviorSubject<string>('group');
+  private readonly fallbackGroup: Group = { id: -1, name: 'Autres', color: 'm-no-color' };
 
-  //fallback group when a category has no group for the group sort option
-  private fallbackGroup = {id: -1, name: 'Autres', color: 'm-no-color' }
+  private readonly initialState: CategoriesState = {
+    categories: [],
+    search: '',
+    sort: 'group',
+    selectedGroupId: null,
+    loading: false,
+    error: null,
+  };
 
-  public init() {
-    if(!this._categories$.value.length) {
-      this.loadCategories();
-    }
-  }
+  private readonly _state$ = new BehaviorSubject<CategoriesState>(this.initialState);
+  readonly state$ = this._state$.asObservable();
 
-  private loadCategories() {
-    this.categoryService.getVisibleCategories().subscribe(categories => {
-      this._categories$.next(categories);
-    });
-  }
+  readonly categories$ = this.state$.pipe(map(state => state.categories));
+  readonly search$ = this.state$.pipe(map(state => state.search));
+  readonly sort$ = this.state$.pipe(map(state => state.sort));
+  readonly selectedGroupId$ = this.state$.pipe(map(state => state.selectedGroupId));
+  readonly loading$ = this.state$.pipe(map(state => state.loading));
+  readonly error$ = this.state$.pipe(map(state => state.error));
 
-  public groups$ = this._categories$.pipe(
+  readonly groups$ = this.categories$.pipe(
     map((categories) => {
-      const group: Group[] = [];
+      const groups: Group[] = [];
       const seen = new Set<number>();
       let hasCatUngrouped = false;
 
       for (const category of categories) {
-        if(category.group) {
-        if (category.group && !seen.has(category.group.id)) {
-          seen.add(category.group.id);
-          group.push(category.group);
-        }
+        if (category.group) {
+          if (!seen.has(category.group.id)) {
+            seen.add(category.group.id);
+            groups.push(category.group);
+          }
         } else {
-          hasCatUngrouped = true
+          hasCatUngrouped = true;
         }
       }
 
-      // There is no such case in the visibleCategories List, but group is optional in Category model
       if (hasCatUngrouped) {
-        group.push(this.fallbackGroup);
+        groups.push(this.fallbackGroup);
       }
 
-      return group;
+      return groups;
     }),
     shareReplay(1),
   );
 
-  public filteredCategories$: Observable<Category[]> = combineLatest([
-    this._categories$,
-    this._search$,
-    this._selectedGroupId$,
-    this._sort$
+  readonly filteredCategories$ = combineLatest([
+    this.categories$,
+    this.search$,
+    this.selectedGroupId$,
+    this.sort$,
   ]).pipe(
     map(([categories, search, group, sort]) => {
       let res: Category[] = [...categories];
 
       if (search) {
-        // Want to search by word instead of just by include string to prevent forgotten words in between
         const wordTab = this.normalizeText(search).split(/\s+/).filter(Boolean);
-
         res = res.filter(category => {
           const categoryText = this.normalizeText(category?.wording) + ' ' + this.normalizeText(category?.description);
           return wordTab.every(word => categoryText.includes(word));
-          }
-        );
+        });
       }
 
       if (group) {
-        res = group === this.fallbackGroup.id ?
-          res.filter((category: Category) => !category.group) :
-          res.filter((category: Category) => category.group?.id === group);
+        res = group === this.fallbackGroup.id
+          ? res.filter(c => !c.group)
+          : res.filter(c => c.group?.id === group);
       }
 
       if (sort === 'alphabet') {
@@ -92,75 +99,69 @@ export class CategoriesStore {
     shareReplay(1),
   );
 
-  public categoriesByGroup$: Observable<CategoryGroup[]> = combineLatest([this.groups$, this.filteredCategories$]).pipe(
+  readonly categoriesByGroup$ = combineLatest([this.groups$, this.filteredCategories$]).pipe(
     map(([groups, categories]) => {
       const res = groups
-        .map((group: Group) => ({
+        .map(group => ({
           group,
-          categories: categories.filter((category) => category.group?.id === group.id)
+          categories: categories.filter(c => c.group?.id === group.id),
         }))
-        .filter((g) => g.categories.length > 0);
+        .filter(g => g.categories.length > 0);
 
       const uncategorized = categories.filter(c => !c.group);
       if (uncategorized.length > 0) {
-        res.push({
-          group: this.fallbackGroup,
-          categories: uncategorized
-        });
+        res.push({ group: this.fallbackGroup, categories: uncategorized });
       }
 
-      //Sort group name in alphabetical order (see Figma wireframes)
       return res.sort((a, b) => a.group.name.localeCompare(b.group.name));
-      }
-    ),
+    }),
     shareReplay(1),
   );
 
-  public clearFilters() {
-    this._search$.next('');
-    this._selectedGroupId$.next(null);
+  init() {
+    if (!this._state$.value.categories.length) {
+      this.loadCategories();
+    }
   }
 
-  /*
-  ==============================
-  ===== GETTER AND SETTER ======
-  ==============================
-  */
+  private loadCategories() {
+    this.patchState({ loading: true, error: null });
 
-  public get categories$() {
-    return this._categories$.asObservable();
+    this.categoryService.getVisibleCategories().subscribe({
+      next: (categories) => {
+        this.patchState({ categories, loading: false });
+      },
+      error: () => {
+        this.patchState({ loading: false, error: 'Impossible de charger les catégories' });
+      },
+    });
   }
 
-  public get sort$() {
-    return this._sort$.asObservable();
+  setSearch(value: string) {
+    this.patchState({ search: value });
   }
 
-  public get search$() {
-    return this._search$.asObservable();
+  setGroup(groupId: number | null) {
+    this.patchState({ selectedGroupId: groupId });
   }
 
-  public get selectedGroupId$() {
-    return this._selectedGroupId$.asObservable();
+  setSort(value: string) {
+    this.patchState({ sort: value });
   }
 
-  public setSearch(value: string): void {
-    this._search$.next(value);
+  clearFilters() {
+    this.patchState({ search: '', selectedGroupId: null });
   }
 
-  public setGroup(groupId: number): void {
-      this._selectedGroupId$.next(groupId);
+  private patchState(patch: Partial<CategoriesState>) {
+    this._state$.next({ ...this._state$.value, ...patch });
   }
 
-  public setSort(value: string): void {
-    this._sort$.next(value);
-  }
-
-  //TODO: Get this function in a text.service if more text manipulation, like using a wysiwig ?
-  protected normalizeText(text: string): string {
+  private normalizeText(text: string): string {
     if (!text) return '';
     return text.normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-zA-Z0-9 ]/g, '')
-      .toLowerCase()
+      .toLowerCase();
   }
 }
