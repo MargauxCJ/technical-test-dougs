@@ -6,7 +6,6 @@
   gap: 16px;
   margin: 32px 10% calc(32px + $footer-height * 2) 10%;
   border-radius: $border-radius-container;
-
   .large-row {
     grid-column: 1 / -1;
   }
@@ -15,6 +14,8 @@
     padding: 16px;
     text-align: center;
     background-color: $white;
+    border-left: $border;
+    border-top: $border;
   }
 
   .filter-container {
@@ -23,7 +24,6 @@
     border-top-right-radius: $border-radius-container;
     border-top-left-radius: $border-radius-container;
     border: $border;
-    border-bottom: $border-transparent;
 
     display: flex;
     flex-direction: row;
@@ -35,22 +35,51 @@
     background: $light;
     border-right-width: 0;
     padding-right: 1px;
+    border-bottom-left-radius: $border-radius-container;
+    border-bottom-right-radius: $border-radius-container;
+    padding-bottom: 1px;
 
     .table-row {
       display: grid;
       gap: 1px;
       background-color: $light;
 
-      .table-item {
+      .table-cell {
         border-bottom: none;
       }
     }
 
-    .table-item {
+    .table-cell {
       display: grid;
       border-left: $border;
       border-bottom: $border;
       gap: 1px;
+    }
+
+    .empty-cell {
+      width: 100%;
+      background-color: $white;
+    }
+  }
+
+
+  .list-group:last-child {
+    .table-cell {
+      .cell:last-child {
+        .empty-cell {
+          border-bottom-right-radius: $border-radius-container;
+        }
+
+        border-bottom-right-radius: $border-radius-container;
+      }
+
+      .cell:last-child(2) {
+        .empty-cell {
+          border-bottom-left-radius: $border-radius-container;
+        }
+
+        border-bottom-left-radius: $border-radius-container;
+      }
     }
   }
 }
@@ -60,9 +89,19 @@
     .table {
       grid-template-columns: repeat(1, 1fr);
 
-      .table-item {
+      .table-cell {
         display: flex;
         flex-direction: column;
+
+        &:last-child {
+          border-bottom-width: 0;
+          border-radius: $border-radius-container;
+        }
+      }
+
+      .table-row {
+        border-bottom-left-radius: $border-radius-container;
+        border-bottom-right-radius: $border-radius-container;
       }
     }
   }

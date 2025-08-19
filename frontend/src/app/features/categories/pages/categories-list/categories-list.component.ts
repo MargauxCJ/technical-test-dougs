@@ -27,7 +27,7 @@ import {SliceToRowsPipe} from '../../../../pipes/slice-to-rows.pipe';
 export class CategoriesListComponent implements OnInit{
   public categoriesStore: CategoriesStore = inject(CategoriesStore);
 
-  public categories$ = this.categoriesStore.filteredCategories$;
+  public filteredCategories$ = this.categoriesStore.filteredCategories$;
   public categoriesByGroup$ = this.categoriesStore.categoriesByGroup$;
 
   public groups$ = this.categoriesStore.groups$;

@@ -33,9 +33,9 @@
   @include button($blue, $white);
 }
 
-.button-clear {
-  text-decoration: underline;
+.primary-button-outline {
   @include button(transparent, $blue);
+  border: 1px solid $blue;
 }
 
 @media (max-width: 576px) {

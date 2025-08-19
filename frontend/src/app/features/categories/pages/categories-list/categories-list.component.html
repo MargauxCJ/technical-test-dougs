@@ -1,18 +1,18 @@
 <div class="body-container">
-
+  @let sort = (sort$|async);
   <header>
     <h1>Catégorie</h1>
     <app-sort-buttons
-      [ngModel]="sort$|async"
+      [ngModel]="sort"
       (ngModelChange)="categoriesStore.setSort($event)"
       [options]="sortOptions">
     </app-sort-buttons>
   </header>
 
-  <div class="table-container">
+  <div class="table-container" [style.border-bottom-width]="sort === 'alphabet' ? '0': '1px'">
 
     <!--  Filters & Search  -->
-    <div class="large-row filter-container">
+    <div class="large-row filter-container" [style.border-bottom-width]="sort === 'alphabet' ? '1px' :'0'">
       <app-search-bar [ngModel]="search$|async" (ngModelChange)="categoriesStore.setSearch($event)"/>
       <app-select
         [options]="groups$|async"
@@ -26,10 +26,10 @@
 
     <!--  Categories table  -->
     <div class="table">
-      @if ((categories$|async).length > 0) {
-        @if ((sort$|async) === 'alphabet') {
+      @if ((filteredCategories$|async).length > 0) {
+        @if (sort === 'alphabet') {
           <!-- Alphabetical Order, without group -->
-          @for (row of (categories$|async | sliceToRows:listColumnNumber); track row) {
+          @for (row of (filteredCategories$|async | sliceToRows:listColumnNumber); track row) {
             <ng-container *ngTemplateOutlet="tableItem; context: {row, showTag: true}"></ng-container>
           }
 
@@ -53,7 +53,7 @@
       } @else {
         <div class="large-row no-data">
           <p>Aucune catégorie ne correspond à la recherche.</p>
-          <button class="button-clear" (click)="categoriesStore.clearFilters()">Effacer les filtres</button>
+          <button class="primary-button-outline" (click)="categoriesStore.clearFilters()">Effacer les filtres</button>
         </div>
       }
     </div>
@@ -72,10 +72,11 @@
 
 <!-- COLUMN ITEM TEMPLATE -->
 <ng-template #tableItem let-row="row" let-showTag="showTag">
-  <div class="table-item" [style.grid-template-columns]="'repeat(' + listColumnNumber + ', 1fr)'">
+  <div class="table-cell" [style.grid-template-columns]="'repeat(' + listColumnNumber + ', 1fr)'">
 
     @for (category of row; track category.id) {
       <app-category-card
+        class="cell"
         [category]="category"
         [isCategorySelected]="selectedCategory?.id === category.id"
         [showTag]="showTag"
@@ -84,7 +85,7 @@
     }
 
     @for (empty of getEmptyColumns(row.length, listColumnNumber); track $index) {
-      <div style="width: 100%; background-color: white"></div>
+      <div class="cell empty-cell"></div>
     }
 
   </div>
