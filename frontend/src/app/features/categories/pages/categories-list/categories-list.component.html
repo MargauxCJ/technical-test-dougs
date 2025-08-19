@@ -1,10 +1,14 @@
 <div class="body-container">
   <!-- ALL THE ASYNC ON CATEGORIES STATE  -->
-  @let sort = (sort$|async);
-  @let loading = (loading$|async);
-  @let error = (error$|async);
-  @let filteredCategories = (filteredCategories$|async);
-  @let groupedCategories = (categoriesByGroup$|async);
+  <!-- It could be stored in intermediate values in the TypeScript file, but it will increase the asyncpipe use -->
+  @let sort = (categoriesStore.sort$|async);
+  @let loading = (categoriesStore.loading$|async);
+  @let error = (categoriesStore.error$|async);
+  @let filteredCategories = (categoriesStore.filteredCategories$|async);
+  @let groupedCategories = (categoriesStore.categoriesByGroup$|async);
+  @let groups = (this.categoriesStore.groups$|async);
+  @let search = (this.categoriesStore.search$|async);
+  @let selectedGroupId = (this.categoriesStore.selectedGroupId$|async);
 
   <app-header>
     <span header-title>Catégorie</span>
@@ -19,10 +23,10 @@
   <div class="table-container" [style.border-bottom-width]="sort === 'alphabet' ? '0' : '1px'">
     <!-- Filters & Search -->
     <div class="large-row filter-container" [style.border-bottom-width]="sort === 'alphabet' ? '1px' : '0'">
-      <app-search-bar [ngModel]="search$|async" (ngModelChange)="categoriesStore.setSearch($event)"/>
+      <app-search-bar [ngModel]="search" (ngModelChange)="categoriesStore.setSearch($event)"/>
       <app-select
-        [options]="groups$|async"
-        [ngModel]="selectedGroupId$|async"
+        [options]="groups"
+        [ngModel]="selectedGroupId"
         [labelKey]="'name'"
         [valueKey]="'id'"
         [defaultOption]="{value: null, label: 'Tous les groupes de catégories'}"

@@ -1,14 +1,14 @@
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, map, shareReplay } from 'rxjs';
-import { Category, CategoryGroup } from '../models/category.model';
-import { CategoryService } from '../services/category.service';
-import { Group } from '../models/group.model';
+import {inject, Injectable} from '@angular/core';
+import {BehaviorSubject, combineLatest, map, shareReplay} from 'rxjs';
+import {Category} from '../models/category.model';
+import {CategoryService} from '../services/category.service';
+import {Group} from '../models/group.model';
 
 
 interface CategoriesState {
   categories: Category[];
   search: string;
-  sort: string;
+  sort: 'alphabet' | 'group';
   selectedGroupId: number | null;
   loading: boolean;
   error: string | null;
@@ -20,6 +20,7 @@ export class CategoriesStore {
 
   private readonly fallbackGroup: Group = { id: -1, name: 'Autres', color: 'm-no-color' };
 
+  // ----- STATE -----
   private readonly initialState: CategoriesState = {
     categories: [],
     search: '',
@@ -28,10 +29,10 @@ export class CategoriesStore {
     loading: false,
     error: null,
   };
-
   private readonly _state$ = new BehaviorSubject<CategoriesState>(this.initialState);
   readonly state$ = this._state$.asObservable();
 
+  // ----- SELECTORS -----
   readonly categories$ = this.state$.pipe(map(state => state.categories));
   readonly search$ = this.state$.pipe(map(state => state.search));
   readonly sort$ = this.state$.pipe(map(state => state.sort));
@@ -39,6 +40,7 @@ export class CategoriesStore {
   readonly loading$ = this.state$.pipe(map(state => state.loading));
   readonly error$ = this.state$.pipe(map(state => state.error));
 
+  // ---- STATE DERIVED (state recalculation)----
   readonly groups$ = this.categories$.pipe(
     map((categories) => {
       const groups: Group[] = [];
@@ -84,8 +86,8 @@ export class CategoriesStore {
 
       if (group) {
         res = group === this.fallbackGroup.id
-          ? res.filter(c => !c.group)
-          : res.filter(c => c.group?.id === group);
+          ? res.filter((category: Category) => !category.group)
+          : res.filter((category: Category) => category.group?.id === group);
       }
 
       if (sort === 'alphabet') {
@@ -124,6 +126,7 @@ export class CategoriesStore {
     }
   }
 
+  // ----- EFFECTS -----
   private loadCategories() {
     this.patchState({ loading: true, error: null });
 
@@ -137,6 +140,7 @@ export class CategoriesStore {
     });
   }
 
+  // ----- ACTIONS -----
   setSearch(value: string) {
     this.patchState({ search: value });
   }
@@ -145,7 +149,7 @@ export class CategoriesStore {
     this.patchState({ selectedGroupId: groupId });
   }
 
-  setSort(value: string) {
+  setSort(value: 'alphabet' | 'group') {
     this.patchState({ sort: value });
   }
 
@@ -153,10 +157,12 @@ export class CategoriesStore {
     this.patchState({ search: '', selectedGroupId: null });
   }
 
+  // ----- UTILITIES ? -----
   private patchState(patch: Partial<CategoriesState>) {
     this._state$.next({ ...this._state$.value, ...patch });
   }
 
+  //Fixme: Get that in a text service if other string manipulation like that (like if there is a wysiwyg)
   private normalizeText(text: string): string {
     if (!text) return '';
     return text.normalize('NFD')

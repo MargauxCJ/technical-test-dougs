@@ -33,17 +33,8 @@ import {HeaderComponent} from '../../../../core/components/header/header.compone
 export class CategoriesListComponent implements OnInit {
   public categoriesStore: CategoriesStore = inject(CategoriesStore);
 
-  public filteredCategories$ = this.categoriesStore.filteredCategories$;
-  public categoriesByGroup$ = this.categoriesStore.categoriesByGroup$;
-  public groups$ = this.categoriesStore.groups$;
-  public sort$ = this.categoriesStore.sort$;
-  public search$ = this.categoriesStore.search$;
-  public selectedGroupId$ = this.categoriesStore.selectedGroupId$;
-
-  public loading$ = this.categoriesStore.loading$;
-  public error$ = this.categoriesStore.error$;
-
   public listColumnNumber = 2;
+
   public sortOptions: SortOption[] = [
     { label: 'Groupe de catégorie', value: 'group', icon: 'icon-group'},
     { label: 'Ordre alphabétique', value: 'alphabet', icon: 'icon-alphabet'},
