@@ -9,6 +9,8 @@ import {Category} from '../../models/category.model';
 import {CommonModule} from '@angular/common';
 import {SliceToRowsPipe} from '../../../../shared/pipes/slice-to-rows.pipe';
 import {LoadingComponent} from '../../../../shared/ui/loading/loading.component';
+import {FooterComponent} from '../../../../core/components/footer/footer.component';
+import {HeaderComponent} from '../../../../core/components/header/header.component';
 
 @Component({
   selector: 'app-categories-list',
@@ -21,6 +23,8 @@ import {LoadingComponent} from '../../../../shared/ui/loading/loading.component'
     CommonModule,
     SliceToRowsPipe,
     LoadingComponent,
+    FooterComponent,
+    HeaderComponent,
   ],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.scss',

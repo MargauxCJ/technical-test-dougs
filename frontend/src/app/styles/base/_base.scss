@@ -12,7 +12,7 @@ body {
 
 // Could have been in a scss page separate if I have done layouts header and footer
 // but for a one page test it seem a little bit overkill
-header {
+.header {
   background-color: variables.$container-bg;
   padding: 15px 10%;
 
@@ -28,7 +28,7 @@ header {
   flex-direction: column;
 }
 
-footer {
+.footer {
   position: fixed;
   width: 100%;
   box-sizing: border-box;
@@ -85,17 +85,17 @@ footer {
       top: 50%;
       left: 0;
       transform: translate(-20px, -50%) rotate(0deg);
-      animation: rollAcross 3s linear infinite;
+      animation: rollAcross 2s linear infinite;
     }
 
     .logo:nth-child(1) {
       animation-delay: 0s;
     }
     .logo:nth-child(2) {
-      animation-delay: 0.3s;
+      animation-delay: 0.2s;
     }
     .logo:nth-child(3) {
-      animation-delay: 0.6s;
+      animation-delay: 0.4s;
     }
   }
 }

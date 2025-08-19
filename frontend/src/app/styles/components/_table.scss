@@ -4,7 +4,7 @@
 
 .table-container {
   gap: 16px;
-  margin: 32px 10% calc(32px + $footer-height * 2) 10%;
+  margin: 32px 10% calc(32px + $footer-height) 10%;
   border-radius: $border-radius-container;
 
   .large-row {
@@ -70,7 +70,6 @@
         .empty-cell {
           border-bottom-right-radius: $border-radius-container;
         }
-
         border-bottom-right-radius: $border-radius-container;
       }
 
@@ -78,7 +77,6 @@
         .empty-cell {
           border-bottom-left-radius: $border-radius-container;
         }
-
         border-bottom-left-radius: $border-radius-container;
       }
     }

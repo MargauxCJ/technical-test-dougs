@@ -6,14 +6,15 @@
   @let filteredCategories = (filteredCategories$|async);
   @let groupedCategories = (categoriesByGroup$|async);
 
-  <header>
-    <h1>Catégorie</h1>
+  <app-header>
+    <span header-title>Catégorie</span>
     <app-sort-buttons
+      header-content
       [ngModel]="sort"
       (ngModelChange)="categoriesStore.setSort($event)"
       [options]="sortOptions">
     </app-sort-buttons>
-  </header>
+  </app-header>
 
   <div class="table-container" [style.border-bottom-width]="sort === 'alphabet' ? '0' : '1px'">
     <!-- Filters & Search -->
@@ -73,14 +74,16 @@
     </div>
   </div>
 
-  <footer>
+  <app-footer>
+    <div footer-content>
     <button class="primary-button"
             [class.disabled]="!selectedCategory"
             (click)="displayCategory()"
             [disabled]="!selectedCategory">
       Sélectionner la catégorie
     </button>
-  </footer>
+    </div>
+  </app-footer>
 </div>
 
 <!-- COLUMN ITEM TEMPLATE -->
