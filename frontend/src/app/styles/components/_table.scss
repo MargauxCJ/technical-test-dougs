@@ -31,20 +31,25 @@
     gap: 16px;
   }
 
-  .table-grid {
+  .table {
     background: $light;
-    border: $border;
+    border-right-width: 0;
     padding-right: 1px;
 
-    .list-grid-row {
+    .table-row {
       display: grid;
       gap: 1px;
       background-color: $light;
+
+      .table-item {
+        border-bottom: none;
+      }
     }
 
-    .list-grid-item {
+    .table-item {
       display: grid;
-      grid-template-columns: repeat(2, 50%);
+      border-left: $border;
+      border-bottom: $border;
       gap: 1px;
     }
   }
@@ -52,16 +57,13 @@
 
 @media (max-width: 576px) {
   .table-container {
-    .table-grid {
+    .table {
       grid-template-columns: repeat(1, 1fr);
 
-      .list-grid-item {
+      .table-item {
         display: flex;
         flex-direction: column;
-        margin-right: -1px;
       }
-      border-right: $border;
-      border-left: $border;
     }
   }
 }

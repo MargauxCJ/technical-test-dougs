@@ -16,7 +16,7 @@
       <app-search-bar [ngModel]="search$|async" (ngModelChange)="categoriesStore.setSearch($event)"/>
       <app-select
         [options]="groups$|async"
-        [ngModel]="selectGroup$|async"
+        [ngModel]="selectedGroupId$|async"
         [labelKey]="'name'"
         [valueKey]="'id'"
         [defaultOption]="{value: null, label: 'Tous les groupes de catégories'}"
@@ -25,21 +25,14 @@
     </div>
 
     <!--  Categories table  -->
-    <div class="table-grid">
+    <div class="table">
       @if ((categories$|async).length > 0) {
         @if ((sort$|async) === 'alphabet') {
           <!-- Alphabetical Order, without group -->
-          <div class="list-grid-item">
-            @for (category of (categories$|async); track category) {
-              <div>
-                <app-category-card
-                  [category]="category"
-                  [isCategorySelected]="categorySelected?.id === category.id"
-                  (selection)="getSelectedCategory($event)"
-                ></app-category-card>
-              </div>
-            }
-          </div>
+          @for (row of (categories$|async | sliceToRows:listColumnNumber); track row) {
+            <ng-container *ngTemplateOutlet="tableItem; context: {row, showTag: true}"></ng-container>
+          }
+
         } @else {
 
           <!-- Group Order -->
@@ -49,21 +42,9 @@
                    [ngClass]="categoriesByGroup.group.color ? categoriesByGroup.group.color : 'm-no-color'">
                 {{ categoriesByGroup.group.name }}
               </div>
-              <div class="list-grid-row">
-                @for (row of (categoriesByGroup.categories | sliceToRows:2); track row) {
-                  <div class="list-grid-item">
-                    @for (category of row; track category) {
-                      <app-category-card
-                        [category]="category"
-                        [isCategorySelected]="categorySelected?.id === category.id"
-                        [showTag]="false"
-                        (selection)="getSelectedCategory($event)"
-                      ></app-category-card>
-                    }
-                    @if (row.length === 1) {
-                      <div style="width: 100%; background-color: white"></div>
-                    }
-                  </div>
+              <div class="table-row">
+                @for (row of (categoriesByGroup.categories | sliceToRows:listColumnNumber); track row) {
+                    <ng-container *ngTemplateOutlet="tableItem; context: {row, showTag: false}"></ng-container>
                 }
               </div>
             </div>
@@ -76,17 +57,35 @@
         </div>
       }
     </div>
-
-
   </div>
 
   <footer>
     <button class="primary-button"
-            [class.disabled]="!categorySelected"
+            [class.disabled]="!selectedCategory"
             (click)="displayCategory()"
             tabindex="0"
-            [disabled]="!categorySelected">
+            [disabled]="!selectedCategory">
       Sélectionner la catégorie
     </button>
   </footer>
 </div>
+
+<!-- COLUMN ITEM TEMPLATE -->
+<ng-template #tableItem let-row="row" let-showTag="showTag">
+  <div class="table-item" [style.grid-template-columns]="'repeat(' + listColumnNumber + ', 1fr)'">
+
+    @for (category of row; track category.id) {
+      <app-category-card
+        [category]="category"
+        [isCategorySelected]="selectedCategory?.id === category.id"
+        [showTag]="showTag"
+        (selection)="getSelectedCategory($event)">
+      </app-category-card>
+    }
+
+    @for (empty of getEmptyColumns(row.length, listColumnNumber); track $index) {
+      <div style="width: 100%; background-color: white"></div>
+    }
+
+  </div>
+</ng-template>

@@ -18,7 +18,7 @@ import {SliceToRowsPipe} from '../../../../pipes/slice-to-rows.pipe';
     FormsModule,
     SelectComponent,
     CommonModule,
-    SliceToRowsPipe
+    SliceToRowsPipe,
   ],
   templateUrl: './categories-list.component.html',
   styleUrl: './categories-list.component.scss',
@@ -33,23 +33,30 @@ export class CategoriesListComponent implements OnInit{
   public groups$ = this.categoriesStore.groups$;
   public sort$ = this.categoriesStore.sort$;
   public search$ = this.categoriesStore.search$;
-  public selectGroup$ = this.categoriesStore.selectGroup$;
+  public selectedGroupId$ = this.categoriesStore.selectedGroupId$;
 
-  public categorySelected: Category;
+  public listColumnNumber = 2;
   public sortOptions: SortOption[] = [
     { label: 'Groupe de catégorie', value: 'group', icon: 'icon-group'},
     { label: 'Ordre alphabétique', value: 'alphabet', icon: 'icon-alphabet'},
   ];
 
+  public selectedCategory: Category;
+
+  getEmptyColumns(usedColumns: number, totalColumns: number): number[] {
+    const emptyCount = totalColumns - usedColumns;
+    return emptyCount > 0 ? Array(emptyCount).fill(0) : [];
+  }
+
   public ngOnInit(): void {
-    this.categoriesStore.init()
+    this.categoriesStore.init();
   }
 
   public getSelectedCategory(value: Category) {
-    this.categorySelected = value;
+    this.selectedCategory = value;
   }
 
   public displayCategory() {
-    console.log('category selected : ', this.categorySelected);
+    console.log('category selected : ', this.selectedCategory);
   }
 }

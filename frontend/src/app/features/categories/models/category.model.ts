@@ -6,3 +6,8 @@ export interface Category {
   wording: string;
   description: string;
 }
+
+export interface CategoryGroup {
+  group: Group,
+  categories: Category[]
+}

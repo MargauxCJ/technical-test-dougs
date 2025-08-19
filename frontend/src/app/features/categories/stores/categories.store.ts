@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
-import {BehaviorSubject, combineLatest, map, shareReplay} from 'rxjs';
-import {Category} from '../models/category.model';
+import {BehaviorSubject, combineLatest, map, Observable, shareReplay} from 'rxjs';
+import {Category, CategoryGroup} from '../models/category.model';
 import {CategoryService} from '../services/category.service';
 import {Group} from '../models/group.model';
 
@@ -11,7 +11,7 @@ export class CategoriesStore {
 
   private _categories$ = new BehaviorSubject<Category[]>([]);
   private _search$ = new BehaviorSubject<string>('');
-  private _selectGroup$ = new BehaviorSubject<number | null>(null);
+  private _selectedGroupId$ = new BehaviorSubject<number | null>(null);
   private _sort$ = new BehaviorSubject<string>('group');
 
   private fallbackGroup = {id: -1, name: 'Autres', color: 'm-no-color' }
@@ -55,10 +55,10 @@ export class CategoriesStore {
     shareReplay(1),
   );
 
-  public filteredCategories$ = combineLatest([
+  public filteredCategories$: Observable<Category[]> = combineLatest([
     this._categories$,
     this._search$,
-    this._selectGroup$,
+    this._selectedGroupId$,
     this._sort$
   ]).pipe(
     map(([categories, search, group, sort]) => {
@@ -92,7 +92,7 @@ export class CategoriesStore {
     shareReplay(1),
   );
 
-  public categoriesByGroup$ = combineLatest([this.groups$, this.filteredCategories$]).pipe(
+  public categoriesByGroup$: Observable<CategoryGroup[]> = combineLatest([this.groups$, this.filteredCategories$]).pipe(
     map(([groups, categories]) => {
       const res = groups
         .map((group: Group) => ({
@@ -118,7 +118,7 @@ export class CategoriesStore {
 
   public clearFilters() {
     this._search$.next('');
-    this._selectGroup$.next(null);
+    this._selectedGroupId$.next(null);
   }
 
   /*
@@ -139,8 +139,8 @@ export class CategoriesStore {
     return this._search$.asObservable();
   }
 
-  public get selectGroup$() {
-    return this._selectGroup$.asObservable();
+  public get selectedGroupId$() {
+    return this._selectedGroupId$.asObservable();
   }
 
   public setSearch(value: string): void {
@@ -148,7 +148,7 @@ export class CategoriesStore {
   }
 
   public setGroup(groupId: number): void {
-      this._selectGroup$.next(groupId);
+      this._selectedGroupId$.next(groupId);
   }
 
   public setSort(value: string): void {
