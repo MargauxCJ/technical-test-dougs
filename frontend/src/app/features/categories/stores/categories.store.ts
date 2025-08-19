@@ -6,7 +6,6 @@ import {Group} from '../models/group.model';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesStore {
-
   private categoryService= inject(CategoryService);
 
   private _categories$ = new BehaviorSubject<Category[]>([]);
@@ -14,6 +13,7 @@ export class CategoriesStore {
   private _selectedGroupId$ = new BehaviorSubject<number | null>(null);
   private _sort$ = new BehaviorSubject<string>('group');
 
+  //fallback group when a category has no group for the group sort option
   private fallbackGroup = {id: -1, name: 'Autres', color: 'm-no-color' }
 
   public init() {

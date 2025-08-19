@@ -7,7 +7,7 @@ import {CategoriesStore} from '../../stores/categories.store';
 import {SelectComponent} from '../../../../shared/ui/select/select.component';
 import {Category} from '../../models/category.model';
 import {CommonModule} from '@angular/common';
-import {SliceToRowsPipe} from '../../../../pipes/slice-to-rows.pipe';
+import {SliceToRowsPipe} from '../../../../shared/pipes/slice-to-rows.pipe';
 
 @Component({
   selector: 'app-categories-list',
