@@ -23,7 +23,7 @@
   <div class="table-container" [style.border-bottom-width]="sort === 'alphabet' ? '0' : '1px'">
     <!-- Filters & Search -->
     <div class="large-row filter-container"
-         [style.border-bottom-width]="(sort === 'alphabet') && (filteredCategories.length === 0) ? '1px' : '0'">
+         [style.border-bottom-width]="(sort === 'alphabet') ? '1px' : '0'">
       <app-search-bar [ngModel]="search" (ngModelChange)="categoriesStore.setSearch($event)"/>
       <app-select
         [options]="groups"
