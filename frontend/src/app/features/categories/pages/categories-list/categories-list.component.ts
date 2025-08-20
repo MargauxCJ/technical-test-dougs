@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {CategoryCardComponent} from '../../components/category-card/category-card.component';
-import {SearchComponent} from '../../../../shared/ui/search/search.component';
+import {InputComponent} from '../../../../shared/ui/search/input.component';
 import {SortButtonsComponent, SortOption} from '../../../../shared/ui/sort-buttons/sort-buttons.component';
 import {FormsModule} from '@angular/forms';
 import {CategoriesStore} from '../../stores/categories.store';
@@ -16,7 +16,7 @@ import {HeaderComponent} from '../../../../core/components/header/header.compone
   selector: 'app-categories-list',
   imports: [
     CategoryCardComponent,
-    SearchComponent,
+    InputComponent,
     SortButtonsComponent,
     FormsModule,
     SelectComponent,

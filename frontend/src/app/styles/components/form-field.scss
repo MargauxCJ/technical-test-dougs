@@ -5,13 +5,14 @@ input[type=text] {
   @include form-field();
 }
 
-//search-bar
-input[type=text].search-bar {
+//input (search-bar)
+input[type=text].input {
   box-sizing: border-box;
   background-image: url('../../../../public/icons/search-icon.svg');
   background-position: 10px center;
   background-repeat: no-repeat;
-  padding: 8px 20px 8px 40px;
+  padding: 8px 40px;
+  width: 100%;
   @include form-field();
 
   &::placeholder {
@@ -19,15 +20,56 @@ input[type=text].search-bar {
   }
 }
 
-app-search-bar {
+.input-container {
+  position: relative;
+  display: inline-block;
   width: 100%;
 }
 
-.search-bar {
+app-input {
+  width: 100%;
+}
+
+.input {
   width: 100%;
   padding: 8px 12px;
   font-size: 14px;
 }
+
+.clear-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50%;
+
+  color: $blue;
+
+  padding: 4px;
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  z-index: 1;
+
+  &:hover {
+    background-color: $light;
+  }
+
+  &:active {
+    background-color: $medium;
+  }
+}
+
 
 //select
 select {

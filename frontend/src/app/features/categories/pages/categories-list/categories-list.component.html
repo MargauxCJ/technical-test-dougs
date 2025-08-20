@@ -24,7 +24,7 @@
     <!-- Filters & Search -->
     <div class="large-row filter-container"
          [style.border-bottom-width]="(sort === 'alphabet') ? '1px' : '0'">
-      <app-search-bar [ngModel]="search" (ngModelChange)="categoriesStore.setSearch($event)"/>
+      <app-input [ngModel]="search" (ngModelChange)="categoriesStore.setSearch($event)"/>
       <app-select
         [options]="groups"
         [ngModel]="selectedGroupId"
