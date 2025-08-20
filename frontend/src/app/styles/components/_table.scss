@@ -3,7 +3,6 @@
 
 
 .table-container {
-  gap: 16px;
   margin: 32px 10% calc(32px + $footer-height) 10%;
   border-radius: $border-radius-container;
 
@@ -34,11 +33,10 @@
 
   .table {
     background: $light;
-    border-right-width: 0;
     padding-right: 1px;
+    padding-bottom: 1px;
     border-bottom-left-radius: $border-radius-container;
     border-bottom-right-radius: $border-radius-container;
-    padding-bottom: 1px;
 
     .table-row {
       display: grid;

@@ -11,7 +11,7 @@ export interface SortOption {
   selector: 'app-sort-buttons',
   template: `
     <div class="sort-buttons">
-      @for (opt of options; track opt) {
+      @for (opt of options; track opt.value) {
         <button class="sort-button"
                 [class.selected]="opt.value === selectedValue"
                 (click)="selectOption(opt)">

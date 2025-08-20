@@ -22,7 +22,8 @@
 
   <div class="table-container" [style.border-bottom-width]="sort === 'alphabet' ? '0' : '1px'">
     <!-- Filters & Search -->
-    <div class="large-row filter-container" [style.border-bottom-width]="sort === 'alphabet' ? '1px' : '0'">
+    <div class="large-row filter-container"
+         [style.border-bottom-width]="(sort === 'alphabet') && (filteredCategories.length === 0) ? '1px' : '0'">
       <app-search-bar [ngModel]="search" (ngModelChange)="categoriesStore.setSearch($event)"/>
       <app-select
         [options]="groups"
@@ -43,7 +44,7 @@
       } @else if (error) {
         <!-- ERROR -->
         <div class="large-row  no-data error">
-        <p>Un problème est survenu : {{error}}</p>
+          <p>Un problème est survenu : {{error}}</p>
           <button class="primary-button-outline" (click)="categoriesStore.init()">Réessayer</button>
         </div>
       } @else if (filteredCategories?.length > 0) {
@@ -70,7 +71,7 @@
         }
       } @else {
         <!-- NO DATA :( -->
-        <div class="large-row no-data">
+        <div class="large-row no-data" [style.border-top-width]="(sort === 'alphabet') ? '0' : '1px'">
           <p>Aucune catégorie ne correspond à la recherche.</p>
           <button class="primary-button-outline" (click)="categoriesStore.clearFilters()">Effacer les filtres</button>
         </div>
@@ -80,12 +81,12 @@
 
   <app-footer>
     <div footer-content>
-    <button class="primary-button"
-            [class.disabled]="!selectedCategory"
-            (click)="displayCategory()"
-            [disabled]="!selectedCategory">
-      Sélectionner la catégorie
-    </button>
+      <button class="primary-button"
+              [class.disabled]="!selectedCategory"
+              (click)="displayCategory()"
+              [disabled]="!selectedCategory">
+        Sélectionner la catégorie
+      </button>
     </div>
   </app-footer>
 </div>

@@ -1,8 +1,6 @@
 @use "../variables" as *;
 @use "../mixins" as *;
 
-
-
 input[type=text] {
   @include form-field();
 }

@@ -6,7 +6,7 @@ import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/for
   template: `
     <select [(ngModel)]="selectedValue" (ngModelChange)="onSelect($event)">
       <option [ngValue]="defaultOption.value">{{ defaultOption.label }}</option>
-      @for (option of options; track option) {
+      @for (option of options; track option[valueKey]) {
         <option [ngValue]="option[valueKey]">{{ option[labelKey] }}</option>
       }
     </select>
@@ -40,7 +40,7 @@ export class SelectComponent<T, K extends keyof T = keyof T> implements ControlV
   }
 
   writeValue(value: T[K] | null): void {
-    this.selectedValue = value ?? this.defaultOption.value;
+    this.selectedValue = value ?? this.defaultOption.value ?? null;
   }
 
   registerOnChange(fn: (value: T[K] | null) => void): void {
